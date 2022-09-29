@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, Text } from '@chakra-ui/react'
 import React from 'react'
 
 import TotalCoinsImage from '../../assets/totalcoins.png'

@@ -1,6 +1,5 @@
 import { GridItem, Image, Text } from '@chakra-ui/react'
 import React from 'react'
-import { useGetCryptosQuery } from '../../../services/crypto-api';
 
 export const Totals = ( { index, stat } ) => {
 

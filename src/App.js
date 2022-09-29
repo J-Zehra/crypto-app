@@ -1,7 +1,4 @@
 import React, { useState } from 'react'
-
-import { useGetCryptosQuery } from './services/crypto-api'
-import { useGetCryptoNewsQuery } from './services/crypto-news-api';
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Coins } from './pages/Coins';

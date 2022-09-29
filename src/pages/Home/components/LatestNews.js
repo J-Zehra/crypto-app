@@ -1,4 +1,4 @@
-import { Box, Flex, GridItem, Image, Text } from '@chakra-ui/react'
+import { Flex, GridItem, Image, Text } from '@chakra-ui/react'
 import moment from 'moment/moment';
 import React from 'react'
 import { useGetCryptoNewsQuery } from '../../../services/crypto-news-api';

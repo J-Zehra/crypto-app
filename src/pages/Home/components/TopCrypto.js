@@ -1,12 +1,9 @@
-import { Flex, GridItem, Image, Select, Text } from '@chakra-ui/react'
-import millify from 'millify'
-import React, { useState } from 'react'
+import { Flex, GridItem, Image, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { Spinner } from '../../../components/Spinner'
 
 import ArrowUp from '../../../assets/arrowup.png'
-import { useGetCryptoHistoryQuery, useGetTopCryptoQuery } from '../../../services/crypto-api'
-import { LineChart } from './LineChart'
+import { useGetTopCryptoQuery } from '../../../services/crypto-api'
 import { TopCryptoData } from './TopCryptoData'
 
 export const TopCrypto = () => {
