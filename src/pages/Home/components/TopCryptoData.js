@@ -8,17 +8,17 @@ import { LineChart } from './LineChart'
 
 export const TopCryptoData = ({ topCrypto }) => {
 
+    const [currentPrice, setCurrentPrice] = useState();
     const [timePeriod, setTimePeriod] = useState('1h');
     const [dateFormat, setDateFormat] = useState('h:mm')
     const [topCryptoHistoryLabel, setTopCryptoHistoryLabel] = useState([])
     const [topCryptoHistoryData, setTopCryptoHistoryData] = useState([])
-    const [isLoading, setIsLoading] = useState(true)
     
-    const changeDateFormat = () => {
-        switch(timePeriod){
+    const changeDateFormat = (value) => {
+        switch(value){
             case '1h': setDateFormat('h:mm'); break;
             case '12h': setDateFormat('h:mm'); break;
-            case '24': setDateFormat('h:mm'); break;
+            case '24h': setDateFormat('h:mm'); break;
             case '7d': setDateFormat('YYYY-MM-DD'); break;
             case '30d': setDateFormat('YYYY-MM-DD'); break;
             case '1y': setDateFormat('YYYY-MM-DD'); break;
@@ -27,26 +27,28 @@ export const TopCryptoData = ({ topCrypto }) => {
         }
     }
     
-    const { data: topCryptoHistory } = useGetCryptoHistoryQuery({ id: topCrypto?.data?.coins[0]?.uuid, timePeriod })
-    
+    const { data: topCryptoHistory, isFetching } = useGetCryptoHistoryQuery({ id: topCrypto?.data?.coins[0]?.uuid, timePeriod })
+
     useEffect(() => {
-        const fetchHistory = async() => {
-            const label = await topCryptoHistory?.data?.history?.slice().reverse().map((data) => {
+        setCurrentPrice(millify(topCrypto?.data.coins[0].price, {
+            precision: 3
+        }))
+
+        const fetchHistory = () => {
+            const label = topCryptoHistory?.data?.history?.slice().reverse().map((data) => {
                 return moment(data.timestamp * 1000).format(dateFormat)
             })
-            const data = await topCryptoHistory?.data?.history?.map((data) => {
-                setIsLoading(false)
+            const data = topCryptoHistory?.data?.history?.map((data) => {
                 return data.price
             })
-
+            
             setTopCryptoHistoryData(data)
             setTopCryptoHistoryLabel(label)
         }
 
         fetchHistory();
-    }, [dateFormat, topCryptoHistory?.data?.history])
-    
-    
+    }, [dateFormat, topCrypto?.data.coins, topCryptoHistory?.data?.history])
+
     return (
         <>
             <Flex
@@ -64,9 +66,7 @@ export const TopCryptoData = ({ topCrypto }) => {
                         marginLeft='.2rem'
                         color='palette.accent'
                     >
-                        {millify(topCrypto?.data?.coins[0].price, {
-                            precision: 3
-                        })}
+                        {currentPrice}
                     </Text>
                 </Text>
                 <Text
@@ -82,29 +82,51 @@ export const TopCryptoData = ({ topCrypto }) => {
                         {topCrypto?.data?.coins[0]?.symbol}
                     </Text>
                 </Text>
-                <Select
-                    w='5rem'
-                    fontSize='.8rem'
-                    onChange={(e) => {
-                        setIsLoading(true)
-                        setTimePeriod(e.target.value)
-                        changeDateFormat()
-                    }}
+                <Flex
+                    justifyContent='center'
+                    alignItems='center'
+                    gap='1rem'
                 >
-                    <option> 1h </option>
-                    <option> 12h </option>
-                    <option> 24h </option>
-                    <option> 7d </option>
-                    <option> 30d </option>
-                    <option> 1y </option>
-                    <option> 3y </option>
-                </Select>
+                    <Select
+                        w='5rem'
+                        fontSize='.8rem'
+                        h='2rem'
+                        onChange={e => {
+                            
+                        }}
+                    >
+                        <option value='USD'> USD </option>
+                        <option value='PHP'> PHP </option>
+                        <option value='EUR'> EUR </option>
+                        <option value='JPY'> JPY </option>
+                        <option value='AUD'> AUD </option>
+                        <option value='CAD'> CAD </option>
+                    </Select>
+                    <Select
+                        w='5rem'
+                        fontSize='.8rem'
+                        h='2rem'
+                        onChange={(e) => {
+                            changeDateFormat(e.target.value)
+                            setTimePeriod(e.target.value)
+                        }}
+                    >
+                        <option value='1h'> 1h </option>
+                        <option value='12h'> 12h </option>
+                        <option value='24h'> 24h </option>
+                        <option value='7d'> 7d </option>
+                        <option value='30d'> 30d </option>
+                        <option value='1y'> 1y </option>
+                        <option value='3y'> 3y </option>
+                    </Select>
+
+                </Flex>
             </Flex>
             <Flex
                 w='100%'
                 h='100%'
             >
-                {  isLoading ? <Spinner/> : (
+                {  isFetching ? <Spinner/> : (
                     <LineChart topCryptoHistoryLabel={topCryptoHistoryLabel} topCryptoHistoryData={topCryptoHistoryData}/>
                 ) }
             </Flex>

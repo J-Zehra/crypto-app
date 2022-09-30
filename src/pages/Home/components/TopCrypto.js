@@ -8,7 +8,7 @@ import { TopCryptoData } from './TopCryptoData'
 
 export const TopCrypto = () => {
 
-    const { data: topCrypto, isLoading } = useGetTopCryptoQuery();
+    const { data: topCrypto, isFetching } = useGetTopCryptoQuery();
 
     return (
         <GridItem
@@ -50,7 +50,7 @@ export const TopCrypto = () => {
                 </Link>
             </Flex>
 
-            {isLoading ? <Spinner/> : <TopCryptoData topCrypto={topCrypto}/>}
+            {isFetching ? <Spinner/> : <TopCryptoData topCrypto={topCrypto}/>}
 
         </GridItem>
     )
