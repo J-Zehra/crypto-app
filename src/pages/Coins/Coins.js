@@ -5,6 +5,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { LineChart } from './components/LineChart'
 
 import { useGetCryptosQuery } from '../../services/crypto-api'
+import { Link } from 'react-router-dom';
 
 export const Coins = ({ setActive }) => {
 
@@ -60,14 +61,14 @@ export const Coins = ({ setActive }) => {
             pos: 'absolute'
           }}
         >
-          Explore your 
-            <Text
-              as='span'
-              color='palette.accent'
-              marginLeft='.5rem'
-            >
-              Crypto!
-            </Text>
+          Explore your
+          <Text
+            as='span'
+            color='palette.accent'
+            marginLeft='.5rem'
+          >
+            Crypto!
+          </Text>
         </Text>
 
         <Grid
@@ -76,100 +77,104 @@ export const Coins = ({ setActive }) => {
           gap='1.5rem'
           marginTop='6rem'
         >
-          { cryptoData?.map((crypto, index) => {
-            return(
-              <GridItem 
-                colSpan={1} 
+          {cryptoData?.map((crypto, index) => {
+            return (
+              <Link
                 key={index}
-              > 
-                <Flex
-                  backgroundImage={
-                    `linear-gradient(to bottom, rgba(0, 0, 0, .99), rgba(16, 16, 16, .96)),
-                    url(${crypto.iconUrl})`
-                  }
-                  backgroundSize='cover'
-                  backgroundRepeat='no-repeat'
-                  backgroundPosition='center'
-                  flexDir='column'
-                  justifyContent='center'
-                  alignItems='start'
-                  p='1.5rem'
-                  borderRadius='.3rem'
-                  gap='1.3rem'
-                  transition='all .3s ease'
-                  pos='relative'
-                  borderBottom='1px groove'
-                  borderColor={crypto.color}
-                  cursor='pointer'
-
-                  
+                to={`/crypto-details/${crypto.uuid}`}
+              >
+                <GridItem
+                  colSpan={1}
                 >
-                  <Text
-                    fontSize='1.1rem'
-                    fontWeight='semibold'
-                  >
-                    {`${crypto.rank}. ${crypto.name} | `}
-                    <Text
-                      as='span'
-                      marginLeft='.5rem'
-                      color='#282828'
-                    >
-                      { crypto.symbol }
-                    </Text>
-                  </Text>
-
                   <Flex
+                    backgroundImage={
+                      `linear-gradient(to bottom, rgba(0, 0, 0, .99), rgba(16, 16, 16, .96)),
+                      url(${crypto.iconUrl})`
+                    }
+                    backgroundSize='cover'
+                    backgroundRepeat='no-repeat'
+                    backgroundPosition='center'
                     flexDir='column'
-                    gap='.5rem'
-                  >
-                    <Text
-                      fontSize='.8rem'
-                    >
-                      Price:
-                      <Text
-                        as='span'
-                        marginLeft='.5rem'
-                        color='palette.accent'
-                      >
-                        { millify(crypto.price, { precision: 2 }) }
-                      </Text>
-                    </Text>
-                    <Text
-                      fontSize='.8rem'
-                    >
-                      Market Cap:
-                      <Text
-                        as='span'
-                        marginLeft='.5rem'
-                        color='palette.accent'
-                      >
-                        { millify(crypto.marketCap, { precision: 2 }) }
-                      </Text>
-                    </Text>
-                    <Text
-                      fontSize='.8rem'
-                    >
-                      Daily Change:
-                      <Text
-                        as='span'
-                        marginLeft='.5rem'
-                        color='palette.accent'
-                      >
-                        { `${millify(crypto.change, { precision: 2 })}% `}
-                      </Text>
-                    </Text>
-                  </Flex>
+                    justifyContent='center'
+                    alignItems='start'
+                    p='1.5rem'
+                    borderRadius='.3rem'
+                    gap='1.3rem'
+                    transition='all .3s ease'
+                    pos='relative'
+                    borderBottom='1px groove'
+                    borderColor={crypto.color}
+                    cursor='pointer'
 
-                  <Flex
-                    w='100%'
+
                   >
-                    <LineChart data={crypto.sparkline}/>
+                    <Text
+                      fontSize='1.1rem'
+                      fontWeight='semibold'
+                    >
+                      {`${crypto.rank}. ${crypto.name} | `}
+                      <Text
+                        as='span'
+                        marginLeft='.5rem'
+                        color='#282828'
+                      >
+                        {crypto.symbol}
+                      </Text>
+                    </Text>
+
+                    <Flex
+                      flexDir='column'
+                      gap='.5rem'
+                    >
+                      <Text
+                        fontSize='.8rem'
+                      >
+                        Price:
+                        <Text
+                          as='span'
+                          marginLeft='.5rem'
+                          color='palette.accent'
+                        >
+                          {millify(crypto.price, { precision: 2 })}
+                        </Text>
+                      </Text>
+                      <Text
+                        fontSize='.8rem'
+                      >
+                        Market Cap:
+                        <Text
+                          as='span'
+                          marginLeft='.5rem'
+                          color='palette.accent'
+                        >
+                          {millify(crypto.marketCap, { precision: 2 })}
+                        </Text>
+                      </Text>
+                      <Text
+                        fontSize='.8rem'
+                      >
+                        Daily Change:
+                        <Text
+                          as='span'
+                          marginLeft='.5rem'
+                          color='palette.accent'
+                        >
+                          {`${millify(crypto.change, { precision: 2 })}% `}
+                        </Text>
+                      </Text>
+                    </Flex>
+
+                    <Flex
+                      w='100%'
+                    >
+                      <LineChart data={crypto.sparkline} />
+                    </Flex>
                   </Flex>
-                </Flex>
-              </GridItem>
+                </GridItem>
+              </Link>
 
             )
-          }) }
+          })}
         </Grid>
       </Flex>
     </Box>

@@ -6,6 +6,7 @@ import { News } from './pages/News';
 import { Navbar } from './components/Navbar';
 import { theme } from './miscellaneous/theme';
 import { MainPage } from './pages/MainPage';
+import { CryptoDetails } from './pages/Coins/CryptoDetails';
 
 export const App = () => {
 
@@ -18,6 +19,7 @@ export const App = () => {
           <Routes>
             <Route path='/' element={<MainPage setActive={setActive}/>}/>
             <Route path='/coins' element={<Coins setActive={setActive}/>}/>
+            <Route path='/crypto-details/:id' element={<CryptoDetails/>}/>
             <Route path='/news' element={<News setActive={setActive}/>}/>
           </Routes>
         </Router>
