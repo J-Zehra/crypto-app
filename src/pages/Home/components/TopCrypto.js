@@ -44,6 +44,17 @@ export const TopCrypto = () => {
                         fontWeight='normal'
                         fontSize='.8rem'
                         color='palette.accent'
+                        pos='relative'
+
+                        _before={{
+                            content: '""',
+                            pos:'absolute',
+                            bg: 'palette.accent',
+                            bottom: '-.5rem',
+                            right: 0,
+                            w:'5rem',
+                            h:'.01rem'
+                        }}
                     >
                         See all cryptocurrencies
                     </Text>

@@ -1,15 +1,16 @@
-
 import React from 'react'
-import { Line } from 'react-chartjs-2';
+import { Line } from 'react-chartjs-2'
 
-export const LineChart = ({ topCryptoHistoryLabel, topCryptoHistoryData }) => {
+export const LineChart = ({ data }) => {
+
+    console.log(data)
 
     const chartData = {
-        labels: topCryptoHistoryLabel,
+        labels: data.map((data, index) => index),
         datasets: [
             {
                 label: 'Price in USD',
-                data: topCryptoHistoryData,
+                data : data,
                 fill: false,
                 borderWidth: 1,
                 lineTension: .1,
@@ -25,7 +26,6 @@ export const LineChart = ({ topCryptoHistoryLabel, topCryptoHistoryData }) => {
     }
 
     const options = {
-        responsive: true,
         scales: {
             y: {
                 grid: {

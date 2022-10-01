@@ -39,7 +39,7 @@ export const Navbar = ({ active, setActive }) => {
             pos='fixed'
             w='100%'
             h='5rem'
-            zIndex={2}
+            zIndex={999}
             {... scrolled && navScrolledStyle}
         >
             <Flex

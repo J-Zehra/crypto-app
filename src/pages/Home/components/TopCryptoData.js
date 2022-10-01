@@ -5,17 +5,20 @@ import React, { useEffect, useState } from 'react'
 import { Spinner } from '../../../components/Spinner'
 import { useGetCryptoHistoryQuery } from '../../../services/crypto-api'
 import { LineChart } from './LineChart'
+import axios from 'axios'
+import { useGetAllCurrencyQuery } from '../../../services/currency-convert-api'
 
 export const TopCryptoData = ({ topCrypto }) => {
 
-    const [currentPrice, setCurrentPrice] = useState();
+    const [currentCurrency, setCurrentCurrency] = useState('USD')
+    const [currentPrice, setCurrentPrice] = useState(topCrypto?.data.coins[0].price);
     const [timePeriod, setTimePeriod] = useState('1h');
     const [dateFormat, setDateFormat] = useState('h:mm')
     const [topCryptoHistoryLabel, setTopCryptoHistoryLabel] = useState([])
     const [topCryptoHistoryData, setTopCryptoHistoryData] = useState([])
-    
+
     const changeDateFormat = (value) => {
-        switch(value){
+        switch (value) {
             case '1h': setDateFormat('h:mm'); break;
             case '12h': setDateFormat('h:mm'); break;
             case '24h': setDateFormat('h:mm'); break;
@@ -26,14 +29,39 @@ export const TopCryptoData = ({ topCrypto }) => {
             default: setDateFormat('h:mm:ss')
         }
     }
-    
+
     const { data: topCryptoHistory, isFetching } = useGetCryptoHistoryQuery({ id: topCrypto?.data?.coins[0]?.uuid, timePeriod })
+    const { data: currencies } = useGetAllCurrencyQuery();
+
+    console.log(currencies)
+
+    const convertCurrency = async(e) => {
+        const params = {
+            from: currentCurrency,
+            to: e.target.value,
+            amount: currentPrice
+        }
+
+        const options = {
+            method: 'GET',
+            url: 'https://currency-converter18.p.rapidapi.com/api/v1/convert',
+            params,
+            headers: {
+                'X-RapidAPI-Key': '1e4a5a653fmshbeb1f1704b32db8p105c5bjsn8c26bef97e7e',
+                'X-RapidAPI-Host': 'currency-converter18.p.rapidapi.com'
+            }
+        }
+
+        await axios.request(options)
+        .then((res) => {
+            setCurrentPrice(res.data.result.convertedAmount)
+            setCurrentCurrency(e.target.value)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     useEffect(() => {
-        setCurrentPrice(millify(topCrypto?.data.coins[0].price, {
-            precision: 3
-        }))
-
         const fetchHistory = () => {
             const label = topCryptoHistory?.data?.history?.slice().reverse().map((data) => {
                 return moment(data.timestamp * 1000).format(dateFormat)
@@ -41,13 +69,13 @@ export const TopCryptoData = ({ topCrypto }) => {
             const data = topCryptoHistory?.data?.history?.map((data) => {
                 return data.price
             })
-            
+
             setTopCryptoHistoryData(data)
             setTopCryptoHistoryLabel(label)
         }
 
         fetchHistory();
-    }, [dateFormat, topCrypto?.data.coins, topCryptoHistory?.data?.history])
+    }, [ dateFormat, topCrypto.data.coins, topCryptoHistory?.data?.history])
 
     return (
         <>
@@ -66,7 +94,7 @@ export const TopCryptoData = ({ topCrypto }) => {
                         marginLeft='.2rem'
                         color='palette.accent'
                     >
-                        {currentPrice}
+                        {`${millify(currentPrice, { precision: 3 })} ${currentCurrency}`}
                     </Text>
                 </Text>
                 <Text
@@ -91,16 +119,18 @@ export const TopCryptoData = ({ topCrypto }) => {
                         w='5rem'
                         fontSize='.8rem'
                         h='2rem'
-                        onChange={e => {
-                            
-                        }}
+                        onChange={convertCurrency}
                     >
-                        <option value='USD'> USD </option>
-                        <option value='PHP'> PHP </option>
-                        <option value='EUR'> EUR </option>
-                        <option value='JPY'> JPY </option>
-                        <option value='AUD'> AUD </option>
-                        <option value='CAD'> CAD </option>
+                        {currencies?.map((symbol, index) => {
+                            return (
+                                <option
+                                    key={index}
+                                    value={symbol.symbol}
+                                >
+                                    {symbol.symbol}
+                                </option>
+                            )
+                        })}
                     </Select>
                     <Select
                         w='5rem'
@@ -126,9 +156,9 @@ export const TopCryptoData = ({ topCrypto }) => {
                 w='100%'
                 h='100%'
             >
-                {  isFetching ? <Spinner/> : (
-                    <LineChart topCryptoHistoryLabel={topCryptoHistoryLabel} topCryptoHistoryData={topCryptoHistoryData}/>
-                ) }
+                {isFetching ? <Spinner /> : (
+                    <LineChart topCryptoHistoryLabel={topCryptoHistoryLabel} topCryptoHistoryData={topCryptoHistoryData} />
+                )}
             </Flex>
         </>
     )

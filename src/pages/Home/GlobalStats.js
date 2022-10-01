@@ -65,7 +65,7 @@ export const GlobalStats = () => {
                     {stats.map((stat, index) => {
                         return (
                             <Totals
-                                index={index}
+                                key={index}
                                 stat={stat}
                             />
                         )

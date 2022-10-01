@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ChakraProvider } from '@chakra-ui/react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Coins } from './pages/Coins';
+import { Coins } from './pages/Coins/Coins';
 import { News } from './pages/News';
 import { Navbar } from './components/Navbar';
 import { theme } from './miscellaneous/theme';
