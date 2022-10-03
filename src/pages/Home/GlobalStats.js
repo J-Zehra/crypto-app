@@ -12,7 +12,8 @@ import { TopCrypto } from './components/TopCrypto'
 export const GlobalStats = () => {
 
     const { data: cryptos } = useGetCryptosQuery();
-    
+
+    console.log('Check')
     const stats = [
         { title: 'Total Coins', icon: TotalCoinsImage, data: cryptos?.data?.stats?.totalCoins },
         { title: 'Total Markets', icon: TotalMarketImage,  data: cryptos?.data?.stats?.totalMarkets },

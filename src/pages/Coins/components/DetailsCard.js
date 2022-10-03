@@ -75,7 +75,7 @@ export const DetailsCard = ({ cryptoDetails }) => {
             bg='#101010'
             p='1.2rem'
             flexDir='column'
-            gap='3rem'
+            gap='2rem'
         >
             <Text
                 textAlign='center'

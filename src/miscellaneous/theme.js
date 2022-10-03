@@ -31,8 +31,14 @@ const styles = {
             fontSize: '4rem',
             fontWeight: 'bold'
         },
+        h3: {
+            fontSize: '1.2rem',
+            fontWeight:'bold',
+            paddingBlock: '.8rem',
+            color: 'palette.accent'
+        },
         p: {
-            fontSize: '1rem',
+            fontSize: '.9rem',
             fontWeight: 'medium'
         },
         '::-webkit-scrollbar': {

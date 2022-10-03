@@ -1,15 +1,32 @@
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, Text } from '@chakra-ui/react';
 import { useInView } from 'framer-motion';
-import millify from 'millify';
-import React, { useEffect, useRef, useState } from 'react'
-import { LineChart } from './components/LineChart'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 
 import { useGetCryptosQuery } from '../../services/crypto-api'
-import { Link } from 'react-router-dom';
+import { Card } from './components/Card';
+import loadMoreJson from '../../assets/loadMore.json'
+import Lottie from 'react-lottie-player';
 
 export const Coins = ({ setActive }) => {
 
-  const [cryptoData, setCryptoData] = useState([])
+  const [loadMore, setLoadMore] = useState(false);
+  const { data: cryptos } = useGetCryptosQuery();
+
+  const { cryptoItems, moreCryptoItems } = useMemo(() => {
+    const cryptoItems = []
+    const moreCryptoItems = []
+
+    cryptos?.data?.coins.forEach((item, index) => {
+      if (index >= 0 && index <= 49) {
+        cryptoItems.push(item)
+      } else if (index >= 50 && index <= 99) {
+        moreCryptoItems.push(item)
+      } else;
+    });
+
+    return { cryptoItems, moreCryptoItems }
+  }, [cryptos?.data?.coins])
+
   const ref = useRef(null);
   const isInView = useInView(ref)
 
@@ -19,13 +36,7 @@ export const Coins = ({ setActive }) => {
     }
   }, [isInView, setActive])
 
-  const { data: cryptos } = useGetCryptosQuery();
 
-  console.log(cryptos)
-
-  useEffect(() => {
-    setCryptoData(cryptos?.data?.coins)
-  }, [cryptos?.data?.coins])
 
   return (
     <Box
@@ -44,6 +55,7 @@ export const Coins = ({ setActive }) => {
         paddingBlock='10rem'
         margin='auto'
         flexDir='column'
+        pos='relative'
       >
         <Text
           textAlign='center'
@@ -77,104 +89,45 @@ export const Coins = ({ setActive }) => {
           gap='1.5rem'
           marginTop='6rem'
         >
-          {cryptoData?.map((crypto, index) => {
+          {cryptoItems?.map((crypto, index) => {
             return (
-              <Link
-                key={index}
-                to={`/crypto-details/${crypto.uuid}`}
-              >
-                <GridItem
-                  colSpan={1}
-                >
-                  <Flex
-                    backgroundImage={
-                      `linear-gradient(to bottom, rgba(0, 0, 0, .99), rgba(16, 16, 16, .96)),
-                      url(${crypto.iconUrl})`
-                    }
-                    backgroundSize='cover'
-                    backgroundRepeat='no-repeat'
-                    backgroundPosition='center'
-                    flexDir='column'
-                    justifyContent='center'
-                    alignItems='start'
-                    p='1.5rem'
-                    borderRadius='.3rem'
-                    gap='1.3rem'
-                    transition='all .3s ease'
-                    pos='relative'
-                    borderBottom='1px groove'
-                    borderColor={crypto.color}
-                    cursor='pointer'
-
-
-                  >
-                    <Text
-                      fontSize='1.1rem'
-                      fontWeight='semibold'
-                    >
-                      {`${crypto.rank}. ${crypto.name} | `}
-                      <Text
-                        as='span'
-                        marginLeft='.5rem'
-                        color='#282828'
-                      >
-                        {crypto.symbol}
-                      </Text>
-                    </Text>
-
-                    <Flex
-                      flexDir='column'
-                      gap='.5rem'
-                    >
-                      <Text
-                        fontSize='.8rem'
-                      >
-                        Price:
-                        <Text
-                          as='span'
-                          marginLeft='.5rem'
-                          color='palette.accent'
-                        >
-                          {millify(crypto.price, { precision: 2 })}
-                        </Text>
-                      </Text>
-                      <Text
-                        fontSize='.8rem'
-                      >
-                        Market Cap:
-                        <Text
-                          as='span'
-                          marginLeft='.5rem'
-                          color='palette.accent'
-                        >
-                          {millify(crypto.marketCap, { precision: 2 })}
-                        </Text>
-                      </Text>
-                      <Text
-                        fontSize='.8rem'
-                      >
-                        Daily Change:
-                        <Text
-                          as='span'
-                          marginLeft='.5rem'
-                          color='palette.accent'
-                        >
-                          {`${millify(crypto.change, { precision: 2 })}% `}
-                        </Text>
-                      </Text>
-                    </Flex>
-
-                    <Flex
-                      w='100%'
-                    >
-                      <LineChart data={crypto.sparkline} />
-                    </Flex>
-                  </Flex>
-                </GridItem>
-              </Link>
-
+              <Card crypto={crypto} key={index} />
             )
           })}
+          {loadMore &&
+            moreCryptoItems?.map((crypto, index) => {
+              return (
+                <Card crypto={crypto} key={index} />
+              )
+          })}
+
+          <Flex
+            borderRadius='.3'
+            justifyContent='center'
+            alignItems='center'
+            bg='#101010'
+            w='100%'
+            p='2rem'
+            pos='relative'
+            cursor='pointer'
+            onClick={() => {
+              setLoadMore(!loadMore)
+            }}
+          >
+            <Lottie
+              loop
+              animationData={loadMoreJson}
+              play
+            //style={{ width: 150, height: 150 }}
+            />
+            <Text
+              pos='absolute'
+              fontWeight='semibold'
+              color='#808080'
+            >
+              {loadMore ? 'See less...' : 'See more...'}
+            </Text>
+          </Flex>
         </Grid>
       </Flex>
     </Box>

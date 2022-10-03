@@ -1,16 +1,14 @@
-import moment from 'moment'
 import React from 'react'
 import { Line } from 'react-chartjs-2'
 
-export const CryptoDetailsChart = ({ cryptoHistoryDetails }) => {
-
+export const CryptoDetailsChart = ({ label, price }) => {
 
     const chartData = {
-        labels: cryptoHistoryDetails?.map((details) => moment(details.timestamp * 1000).format('h:mm')),
+        labels: label,
         datasets: [
             {
                 label: 'Price in USD',
-                data: cryptoHistoryDetails?.map((details) => details.price),
+                data: price,
                 fill: false,
                 borderWidth: 1,
                 lineTension: .1,

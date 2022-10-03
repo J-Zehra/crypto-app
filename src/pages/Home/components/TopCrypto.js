@@ -1,4 +1,4 @@
-import { Flex, GridItem, Image, Text } from '@chakra-ui/react'
+import { Flex, GridItem, Image, Skeleton, Text } from '@chakra-ui/react'
 import { Link } from 'react-router-dom'
 import { Spinner } from '../../../components/Spinner'
 
@@ -37,7 +37,7 @@ export const TopCrypto = () => {
                     >
                         Top Cryptocurrency
                     </Text>
-                    <Image src={ArrowUp}/>
+                    <Image src={ArrowUp} />
                 </Flex>
                 <Link to='/coins'>
                     <Text
@@ -48,12 +48,12 @@ export const TopCrypto = () => {
 
                         _before={{
                             content: '""',
-                            pos:'absolute',
+                            pos: 'absolute',
                             bg: 'palette.accent',
                             bottom: '-.5rem',
                             right: 0,
-                            w:'5rem',
-                            h:'.01rem'
+                            w: '5rem',
+                            h: '.01rem'
                         }}
                     >
                         See all cryptocurrencies
@@ -61,7 +61,17 @@ export const TopCrypto = () => {
                 </Link>
             </Flex>
 
-            {isFetching ? <Spinner/> : <TopCryptoData topCrypto={topCrypto}/>}
+            {/* {isFetching ? <Spinner /> : <TopCryptoData topCrypto={topCrypto} />} */}
+            <Skeleton
+                h='100%'
+                isLoaded={!isFetching}
+                borderRadius='.5rem'
+                startColor='#151515'
+                endColor='#202020'
+                fadeDuration={1}
+            >
+                <TopCryptoData topCrypto={topCrypto} />
+            </Skeleton>
 
         </GridItem>
     )
