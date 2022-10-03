@@ -6,6 +6,8 @@ import { useGetCryptosQuery } from '../../services/crypto-api'
 import { Card } from './components/Card';
 import loadMoreJson from '../../assets/loadMore.json'
 import Lottie from 'react-lottie-player';
+import { NewestCoins } from './components/NewestCoins';
+import { BestCoins } from './components/BestCoins';
 
 export const Coins = ({ setActive }) => {
 
@@ -83,52 +85,82 @@ export const Coins = ({ setActive }) => {
           </Text>
         </Text>
 
-        <Grid
-          templateColumns='repeat(4, 1fr)'
+        <Flex
           w='100%'
-          gap='1.5rem'
+          justifyContent='space-between'
+          gap='2.5rem'
+          marginTop='5rem'
+        >
+          <NewestCoins />
+          <BestCoins />
+        </Flex>
+
+        <Flex
+          flexDir='column'
+          w='100%'
           marginTop='6rem'
         >
-          {cryptoItems?.map((crypto, index) => {
-            return (
-              <Card crypto={crypto} key={index} />
-            )
-          })}
-          {loadMore &&
-            moreCryptoItems?.map((crypto, index) => {
+          <Text
+            fontSize='1.5rem'
+            fontWeight='bold'
+            paddingBlockEnd='5rem'
+            textAlign='center'
+          >
+            All
+            <Text
+              as='span'
+              marginLeft='.6rem'
+              color='palette.accent'
+            >
+              Cryptocurrencies
+            </Text>
+          </Text>
+          <Grid
+            templateColumns='repeat(4, 1fr)'
+            w='100%'
+            gap='1.5rem'
+          >
+            {cryptoItems?.map((crypto, index) => {
               return (
                 <Card crypto={crypto} key={index} />
               )
-          })}
+            })}
+            {loadMore &&
+              moreCryptoItems?.map((crypto, index) => {
+                return (
+                  <Card crypto={crypto} key={index} />
+                )
+              })}
 
-          <Flex
-            borderRadius='.3'
-            justifyContent='center'
-            alignItems='center'
-            bg='#101010'
-            w='100%'
-            p='2rem'
-            pos='relative'
-            cursor='pointer'
-            onClick={() => {
-              setLoadMore(!loadMore)
-            }}
-          >
-            <Lottie
-              loop
-              animationData={loadMoreJson}
-              play
-            //style={{ width: 150, height: 150 }}
-            />
-            <Text
-              pos='absolute'
-              fontWeight='semibold'
-              color='#808080'
+            <Flex
+              borderRadius='.3'
+              justifyContent='center'
+              alignItems='center'
+              bg='#101010'
+              w='100%'
+              p='2rem'
+              pos='relative'
+              cursor='pointer'
+              onClick={() => {
+                setLoadMore(!loadMore)
+              }}
             >
-              {loadMore ? 'See less...' : 'See more...'}
-            </Text>
-          </Flex>
-        </Grid>
+              <Lottie
+                loop
+                animationData={loadMoreJson}
+                play
+              //style={{ width: 150, height: 150 }}
+              />
+              <Text
+                pos='absolute'
+                fontWeight='semibold'
+                color='#808080'
+              >
+                {loadMore ? 'See less...' : 'See more...'}
+              </Text>
+            </Flex>
+          </Grid>
+        </Flex>
       </Flex>
     </Box>
   )

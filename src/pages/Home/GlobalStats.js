@@ -6,18 +6,18 @@ import TotalMarketImage from '../../assets/totalmarket.png'
 import TotalExchangeImage from '../../assets/totalexchange.png'
 import { LatestNews } from './components/LatestNews'
 import { Totals } from './components/Totals'
-import { useGetCryptosQuery } from '../../services/crypto-api'
+import { useGetGlobalStatsQuery } from '../../services/crypto-api'
 import { TopCrypto } from './components/TopCrypto'
 
 export const GlobalStats = () => {
 
-    const { data: cryptos } = useGetCryptosQuery();
+    const { data: cryptos } = useGetGlobalStatsQuery();
 
     console.log('Check')
     const stats = [
-        { title: 'Total Coins', icon: TotalCoinsImage, data: cryptos?.data?.stats?.totalCoins },
-        { title: 'Total Markets', icon: TotalMarketImage,  data: cryptos?.data?.stats?.totalMarkets },
-        { title: 'Total Exchange', icon: TotalExchangeImage,  data: cryptos?.data?.stats?.totalExchanges },
+        { title: 'Total Coins', icon: TotalCoinsImage, data: cryptos?.data?.totalCoins },
+        { title: 'Total Markets', icon: TotalMarketImage,  data: cryptos?.data?.totalMarkets },
+        { title: 'Total Exchange', icon: TotalExchangeImage,  data: cryptos?.data?.totalExchanges },
     ]
 
     return (

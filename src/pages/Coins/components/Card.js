@@ -52,7 +52,7 @@ export const Card = ({ crypto, index }) => {
                         gap='.5rem'
                     >
                         <Text
-                            fontSize='.8rem'
+                            fontSize='.7rem'
                         >
                             Price:
                             <Text
@@ -64,7 +64,7 @@ export const Card = ({ crypto, index }) => {
                             </Text>
                         </Text>
                         <Text
-                            fontSize='.8rem'
+                            fontSize='.7rem'
                         >
                             Market Cap:
                             <Text
@@ -76,7 +76,7 @@ export const Card = ({ crypto, index }) => {
                             </Text>
                         </Text>
                         <Text
-                            fontSize='.8rem'
+                            fontSize='.7rem'
                         >
                             Daily Change:
                             <Text
